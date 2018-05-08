@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
                     // PİPE VAR YAPILACAK
                   }
 
-                  child_retval = shell_exec_cmd(cl_ptr->first_argv)
+                  child_retval = shell_exec_cmd(cl_ptr->first_argv);
 
                 }else{
                   while(wait(&status) != first_child);
