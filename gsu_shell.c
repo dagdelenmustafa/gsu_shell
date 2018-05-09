@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
               printf("Program Sonlandırıldı\n");
               child_retval = 0;
               shell_free_args(cl_ptr);
-              exit(1);
+              exit(EXIT_SUCCESS);
             }
 
             /* TODO: cd */
@@ -120,11 +120,11 @@ int main(int argc, char *argv[]) {
                   if ((first_child = fork()) < 0) {
                     printf("ERROR: forking error\n");
                     shell_free_args(cl_ptr);
-                    exit(1);
+                    exit(EXIT_FAILURE);
                   }else if(first_child == 0){
                     child_retval = shell_exec_cmd(cl_ptr->first_argv);
                     shell_free_args(cl_ptr);
-                    exit(1);
+                    exit(EXIT_SUCCESS);
                   }else{
                     /* Ebeveyn cocugu/cocuklari yarattiktan sonra buradan
                      * devam ediyor */
@@ -137,25 +137,25 @@ int main(int argc, char *argv[]) {
                   if ((first_child = fork()) < 0) {
                     printf("ERROR: forking error\n");
                     shell_free_args(cl_ptr);
-                    exit(1);
+                    exit(EXIT_FAILURE);
                   }else if(first_child == 0){
                     dup2(fd[1], 1);
                     close(fd[0]);
                     child_retval = shell_exec_cmd(cl_ptr->first_argv);
                     shell_free_args(cl_ptr);
-                    exit(0);
+                    exit(EXIT_SUCCESS);
                   }else{
                     while(wait(&status) != first_child);
                     if ((second_child = fork()) < 0) {
                       printf("ERROR: forking error\n");
                       shell_free_args(cl_ptr);
-                      exit(1);
+                      exit(EXIT_FAILURE);
                     }else if(second_child == 0){
                       dup2(fd[0], 0);
                       close(fd[1]);
                       child_retval = shell_exec_cmd(cl_ptr->second_argv);
                       shell_free_args(cl_ptr);
-                      exit(0);
+                      exit(EXIT_SUCCESS);
                     }else{
                       /* Ebeveyn cocugu/cocuklari yarattiktan sonra buradan
                       * devam ediyor */
