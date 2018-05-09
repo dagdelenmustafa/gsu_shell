@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
                     shell_free_args(cl_ptr);
                     exit(1);
                   }else if(first_child == 0){
-                    child_retval = shell_exec_cmd(cl_ptr->second_argv);
+                    child_retval = shell_exec_cmd(cl_ptr->first_argv);
                     shell_free_args(cl_ptr);
                     exit(1);
                   }else{
@@ -144,14 +144,14 @@ int main(int argc, char *argv[]) {
                       shell_free_args(cl_ptr);
                       exit(1);
                     }else if(second_child == 0){
-                      dup2(fd[1], 1);
-                      close(fd[0]);
+                      dup2(fd[0], 0);
+                      close(fd[1]);
                       child_retval = shell_exec_cmd(cl_ptr->second_argv);
                       shell_free_args(cl_ptr);
                       exit(0);
                     }else{
-                      dup2(fd[0], 0);
-                      close(fd[1]);
+                      dup2(fd[1], 1);
+                      close(fd[0]);
                       child_retval = shell_exec_cmd(cl_ptr->first_argv);
                       shell_free_args(cl_ptr);
                       exit(0);
