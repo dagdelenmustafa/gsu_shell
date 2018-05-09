@@ -4,7 +4,7 @@ int shell_exec_cmd(char **argv) {
     /* TODO: argv ile verilen komut dizisini execvp() kullanarak
      * calistirin. */
      if (execvp(*argv, argv) < 0) {
-       perror("ERROR:");
+       perror("ERROR");
        return errno;
      }
 
