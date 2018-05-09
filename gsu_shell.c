@@ -113,56 +113,27 @@ int main(int argc, char *argv[]) {
             else {
                 /* Cocuk sureclerin PID'lerini tutmak icin. */
                 pid_t first_child, second_child;
-                int status;
-
-                /* TODO: Ilk surecin yaratilmasi */
-                if ((first_child = fork()) < 0) {
-                  printf("ERROR: forking error\n");
-                  exit(1);
-                }else if(first_child == 0){
-
-                  /* TODO: Boru hatti varsa ikinci cocuk yaratilip
-                   * ikinci cocuga ikinci komut calistirtilacak. */
-                  if (cl_ptr->has_pipe == 1) {
-                    // PİPE VAR YAPILACAK
+                if (cl_ptr->has_pipe != 1) {
+                  /* TODO: Ilk surecin yaratilmasi pipe olamama durumu */
+                  if ((first_child = fork()) < 0) {
+                    printf("ERROR: forking error\n");
+                    shell_free_args(cl_ptr);
+                    exit(1);
+                  }else if(first_child == 0){
+                    child_retval = shell_exec_cmd(cl_ptr->first_argv);
+                    shell_free_args(cl_ptr);
+                    exit(1);
+                  }else{
+                    /* Ebeveyn cocugu/cocuklari yarattiktan sonra buradan
+                     * devam ediyor */
+                    int status = -1;
+                    while(wait(&status) != first_child);
+                    shell_free_args(cl_ptr);
                   }
-
-                  child_retval = shell_exec_cmd(cl_ptr->first_argv);
-
-                }else{
-                  while(wait(&status) != first_child);
+                }else if (cl_ptr->has_pipe == 1) {
+                  printf("PİPE VARRR\n");
+                  exit(1);
                 }
-
-
-                //
-                // /* Ebeveyn cocugu/cocuklari yarattiktan sonra buradan
-                //  * devam ediyor */
-                // int status = -1;
-                //
-                // /* TODO: Ebeveyn boru hatti varsa uclari artik kapatabilir.
-                //  * Cunku uclari cocuklar icin yaratmisti kendisi icin degil.*/
-                // if () {
-                // }
-                //
-                // /* TODO: Ilk cocugu bekleyin, donus durumu status
-                //  * degiskenine atanacak. */
-                //
-                // /* TODO: Eger boru hatti var ise ikinci/sagdaki
-                //  * komutu calistiran cocuk sureci de beklemeniz gerekiyor.
-                //  * Donus durumunu ayni status degiskenine yazabilirsiniz.
-                //  * Boylece boru hatti varsa, sagdaki komutun donus degerini
-                //  * kullanmis, soldakini gozardi etmis olacagiz.*/
-                // if () {
-                // }
-                //
-                // /* TODO: Cikis koduyla ilgilendigimiz cocuk olagan bir sekilde
-                //  * sonlandiysa cikis kodunu ogrenerek child_retval degiskenine kaydedin. */
-                // if () {
-                // }
-
-                /* cl_ptr struct'indaki argv dizilerini free ediyoruz. */
-                shell_free_args(cl_ptr);
-
             } /* else */
         } /* if (..) */
     } /* while(1) */
