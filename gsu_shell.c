@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
                     shell_free_args(cl_ptr);
                     exit(1);
                   }else if(first_child == 0){
-                    child_retval = shell_exec_cmd(cl_ptr->first_argv);
+                    child_retval = shell_exec_cmd(cl_ptr->second_argv);
                     shell_free_args(cl_ptr);
                     exit(1);
                   }else{
