@@ -5,6 +5,7 @@ int shell_exec_cmd(char **argv) {
      * calistirin. */
      if (execvp(*argv, argv) < 0) {
        perror("ERROR");
+       printf("Hata Numarası: %d\n", errno);
        return errno;
      }
 
