@@ -150,6 +150,7 @@ int main(int argc, char *argv[]) {
                       shell_free_args(cl_ptr);
                       exit(1);
                     }else if(second_child == 0){
+                      while(wait(&status) != first_child);
                       dup2(fd[0], 0);
                       close(fd[1]);
                       child_retval = shell_exec_cmd(cl_ptr->second_argv);
@@ -161,7 +162,6 @@ int main(int argc, char *argv[]) {
                       close(fd[0]);
                       close(fd[1]);
                       while(wait(&status) != second_child);
-                      while(wait(&status) != first_child);
                       shell_free_args(cl_ptr);
                     }
                   }
