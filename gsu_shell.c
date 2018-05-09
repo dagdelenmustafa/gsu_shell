@@ -144,7 +144,6 @@ int main(int argc, char *argv[]) {
                     child_retval = shell_exec_cmd(cl_ptr->first_argv);
                     exit(EXIT_SUCCESS);
                   }else{
-                    while(wait(&status) != first_child);
                     if ((second_child = fork()) < 0) {
                       printf("ERROR: forking error\n");
                       shell_free_args(cl_ptr);
@@ -159,6 +158,7 @@ int main(int argc, char *argv[]) {
                       * devam ediyor */
                       close(fd[0]);
                       close(fd[1]);
+                      while(wait(&status) != first_child);
                       while(wait(&status) != second_child);
                       shell_free_args(cl_ptr);
                     }
