@@ -1,5 +1,12 @@
 #ifndef _PROCESS_H_
 #define _PROCESS_H_
+#define ENOENTERRORRETURN 127
+#define ENOENTERROR 2
+#define EACCESERRORRETURN 126
+#define EACCESERROR 13
+
+
+
 
 #include <string.h>
 #include <stdlib.h>

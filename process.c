@@ -4,9 +4,13 @@ int shell_exec_cmd(char **argv) {
     /* TODO: argv ile verilen komut dizisini execvp() kullanarak
      * calistirin. */
      if (execvp(*argv, argv) < 0) {
-       perror("ERROR");
-       printf("Hata Numarası: %d\n", errno);
-       return errno;
+       if (errno == ENOENTERROR) {
+         printf("Command not found.\n");
+         return ENOENTERRORRETURN;
+       }else if (errno == EACCESERROR) {
+         printf("Permission denied.\n");
+         return EACCESERRORRETURN;
+       }
      }
 
     /* TODO: Eger execvp() basarili olduysa kod buraya asla gelemeyecektir
