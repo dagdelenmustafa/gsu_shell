@@ -161,6 +161,7 @@ int main(int argc, char *argv[]) {
                       close(fd[0]);
                       close(fd[1]);
                       while(wait(&status) != first_child);
+                      while(wait(&status) != second_child);
                       shell_free_args(cl_ptr);
                     }
                   }
