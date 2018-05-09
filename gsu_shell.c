@@ -145,12 +145,12 @@ int main(int argc, char *argv[]) {
                     shell_free_args(cl_ptr);
                     exit(0);
                   }else{
+                    while(wait(&status) != first_child);
                     if ((second_child = fork()) < 0) {
                       printf("ERROR: forking error\n");
                       shell_free_args(cl_ptr);
                       exit(1);
                     }else if(second_child == 0){
-                      while(wait(&status) != first_child);
                       dup2(fd[0], 0);
                       close(fd[1]);
                       child_retval = shell_exec_cmd(cl_ptr->second_argv);
