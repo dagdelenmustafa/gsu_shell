@@ -163,7 +163,6 @@ int main(int argc, char *argv[]) {
                       close(fd[1]);
                       while(wait(&status) != first_child);
                       shell_free_args(cl_ptr);
-                    }
                   }
                 }
             } /* else */
