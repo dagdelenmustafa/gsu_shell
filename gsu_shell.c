@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
                 * devam ediyor */
                 close(fd[0]);
                 close(fd[1]);
-                status = waitpid(&first_child);
+                waitpid(-1, &status, 0);
                 shell_free_args(cl_ptr);
             } /* else */
         } /* if (..) */
