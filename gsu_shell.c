@@ -139,12 +139,6 @@ int main(int argc, char *argv[]) {
                     shell_free_args(cl_ptr);
                     exit(1);
                   }else if(first_child == 0){
-                    dup2(fd[0], 0);
-                    close(fd[1]);
-                    child_retval = shell_exec_cmd(cl_ptr->first_argv);
-                    shell_free_args(cl_ptr);
-                    exit(0);
-                  }else{
                     if ((second_child = fork()) < 0) {
                       printf("ERROR: forking error\n");
                       shell_free_args(cl_ptr);
@@ -156,6 +150,13 @@ int main(int argc, char *argv[]) {
                       shell_free_args(cl_ptr);
                       exit(0);
                     }else{
+                      dup2(fd[0], 0);
+                      close(fd[1]);
+                      child_retval = shell_exec_cmd(cl_ptr->first_argv);
+                      shell_free_args(cl_ptr);
+                      exit(0);
+                    }
+                  }else{
                       /* Ebeveyn cocugu/cocuklari yarattiktan sonra buradan
                       * devam ediyor */
                       close(fd[0]);
