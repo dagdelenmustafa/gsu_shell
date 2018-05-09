@@ -142,7 +142,6 @@ int main(int argc, char *argv[]) {
                     dup2(fd[1], 1);
                     close(fd[0]);
                     child_retval = shell_exec_cmd(cl_ptr->first_argv);
-                    shell_free_args(cl_ptr);
                     exit(EXIT_SUCCESS);
                   }else{
                     while(wait(&status) != first_child);
@@ -154,7 +153,6 @@ int main(int argc, char *argv[]) {
                       dup2(fd[0], 0);
                       close(fd[1]);
                       child_retval = shell_exec_cmd(cl_ptr->second_argv);
-                      shell_free_args(cl_ptr);
                       exit(EXIT_SUCCESS);
                     }else{
                       /* Ebeveyn cocugu/cocuklari yarattiktan sonra buradan
