@@ -123,31 +123,41 @@ int main(int argc, char *argv[]) {
                   shell_free_args(cl_ptr);
                   exit(EXIT_FAILURE);
                 }else if(first_child == 0){
-                  if (cl_ptr->has_pipe) {
+                  if (cl_ptr->has_pipe == 1) {
+		    close(STDOUT_FILENO);
                     dup2(fd[1], 1);
-                    close(fd[0]);
+		    close(fd[0]);
                   }
-
                   child_retval = shell_exec_cmd(cl_ptr->first_argv);
-                  exit(EXIT_SUCCESS);
+		  shell_free_args(cl_ptr);
+		  exit(child_retval);
                 }
-                if (cl_ptr->has_pipe == 1) {
+                if (cl_ptr->has_pipe == 1){
                   if ((second_child = fork()) < 0) {
                     printf("ERROR: forking error\n");
                     shell_free_args(cl_ptr);
                     exit(EXIT_FAILURE);
                   }else if(second_child == 0){
+		    close(STDIN_FILENO);
                     dup2(fd[0], 0);
-                    close(fd[1]);
+		    close(fd[1]);
                     child_retval = shell_exec_cmd(cl_ptr->second_argv);
-                    exit(EXIT_SUCCESS);
+                    shell_free_args(cl_ptr);
+                    exit(child_retval);
                   }
                 }
                 /* Ebeveyn cocugu/cocuklari yarattiktan sonra buradan
                 * devam ediyor */
                 close(fd[0]);
                 close(fd[1]);
-                waitpid(-1, &status, 0);
+		waitpid(first_child,&status, 0);
+		if(WIFEXITED(status)){
+		   child_retval = WEXITSTATUS(status);
+		}
+		printf("%d", child_retval);
+                if(cl_ptr->has_pipe == 1){
+                   waitpid(second_child,&status, 0);
+                }
                 shell_free_args(cl_ptr);
             } /* else */
         } /* if (..) */

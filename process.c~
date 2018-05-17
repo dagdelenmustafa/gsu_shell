@@ -3,13 +3,14 @@
 int shell_exec_cmd(char **argv) {
     /* TODO: argv ile verilen komut dizisini execvp() kullanarak
      * calistirin. */
-     execvp(argv[0], argv);
-     if (errno == ENOENT) {
-       printf("Command not found.\n");
-       return 127;
-     }else if (errno == EACCES) {
-       printf("Permission denied.\n");
-       return 126;
+     if (execvp(*argv, argv) < 0) {
+       if (errno == ENOENTERROR) {
+         printf("Command not found.\n");
+         return ENOENTERRORRETURN;
+       }else if (errno == EACCESERROR) {
+         printf("Permission denied.\n");
+         return EACCESERRORRETURN;
+       }
      }
 
     /* TODO: Eger execvp() basarili olduysa kod buraya asla gelemeyecektir
