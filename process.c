@@ -1,4 +1,4 @@
-#include "process.h"
+	#include "process.h"
 
 int shell_exec_cmd(char **argv) {
     /* TODO: argv ile verilen komut dizisini execvp() kullanarak
@@ -22,4 +22,19 @@ int shell_exec_cmd(char **argv) {
 
 int shell_redirect_output(char *output_file, int output_append) {
     /* TODO */
+    int fd;
+    if(output_file){
+       if(output_append == 1){
+       	  fd = open(output_file, O_RDWR | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+       }else{
+          fd = open(output_file, O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+       }
+       if (fd < 0){
+       	  fprintf(stderr, "open error: %d [%s]\n", errno, strerror(errno));
+ 	  return 1;
+       }
+       dup2(fd, 1);   // make stdout go to file
+       close(fd);
+    }
+    return 0;
 }

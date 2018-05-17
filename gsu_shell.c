@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -127,6 +128,8 @@ int main(int argc, char *argv[]) {
 		    close(STDOUT_FILENO);
                     dup2(fd[1], 1);
 		    close(fd[0]);
+                  }else{
+	  	    shell_redirect_output(cl_ptr->output_file, cl_ptr->output_append);
                   }
                   child_retval = shell_exec_cmd(cl_ptr->first_argv);
 		  shell_free_args(cl_ptr);
@@ -141,6 +144,7 @@ int main(int argc, char *argv[]) {
 		    close(STDIN_FILENO);
                     dup2(fd[0], 0);
 		    close(fd[1]);
+		    shell_redirect_output(cl_ptr->output_file, cl_ptr->output_append);
                     child_retval = shell_exec_cmd(cl_ptr->second_argv);
                     shell_free_args(cl_ptr);
                     exit(child_retval);
@@ -154,7 +158,6 @@ int main(int argc, char *argv[]) {
 		if(WIFEXITED(status)){
 		   child_retval = WEXITSTATUS(status);
 		}
-		printf("%d", child_retval);
                 if(cl_ptr->has_pipe == 1){
                    waitpid(second_child,&status, 0);
                 }
